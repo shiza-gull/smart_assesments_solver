@@ -1,5 +1,3 @@
-from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
-from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,10 +5,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from .utils import cleanup_cookie
 from .utils import logger_setup
+from .types import WebDriver
 
 logger = logger_setup(__name__)
 
-def login(driver: FirefoxWebDriver | ChromeWebDriver,
+def login(driver: WebDriver,
           landing_url: str,
           username: str | None = None,
           password: str | None = None,
@@ -43,6 +42,8 @@ def login(driver: FirefoxWebDriver | ChromeWebDriver,
         username_field.send_keys(username)
         password_field.send_keys(password)
         password_field.send_keys(Keys.RETURN)
-        WebDriverWait(driver, 20).until(EC.url_to_be(landing_url))
+
     else:
         raise ValueError("You must provide a username and password OR cookies to log into the portal")
+
+    WebDriverWait(driver, 20).until(EC.url_to_be(landing_url))
